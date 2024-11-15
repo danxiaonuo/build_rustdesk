@@ -74,6 +74,7 @@ jobs:
       run: |
         git clone --depth=1 -b $REPO_BRANCH $REPO_URL rustdesk
         cd rustdesk
+        sed -i '/let rs_pk = get_rs_pk(key);/i \    return Ok(());' src/common.rs
         find ${GITHUB_WORKSPACE}/rustdesk/ \( -name .git -o -name .svn \) -type d | xargs -exec rm -rf
              
 
