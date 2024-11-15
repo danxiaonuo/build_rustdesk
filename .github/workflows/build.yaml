@@ -80,7 +80,7 @@ jobs:
     # 上传源码
     - name: 上传源码
       env:
-          GITHUB_TOKEN: ${{ secrets.rustdesk_token }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
       working-directory: ./rustdesk
       run: |
           git init
