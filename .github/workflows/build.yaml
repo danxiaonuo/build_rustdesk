@@ -1,1 +1,98 @@
 
+#=================================================
+# https://github.com/iflyelf/build_rustdesk
+# Description: Build OpenWrt using GitHub Actions
+# Lisence: MIT
+# Author: danxiaonuo
+# Blog: https://www.danxiaonuo.com
+#=================================================
+
+name: rustdesk系统自动编译
+
+# 设置触发条件
+on:
+  # 仓库触发工作流
+  # repository_dispatch:
+  # 编辑文件触发开始编译
+  push:
+  # 手动触发工作流
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'build-rustdesk'
+        required: true
+        default: 'rustdesk系统自动编译'
+  # 定时触发编译(每周五早上5点)
+  schedule:
+    - cron: '0 21 * * 5'
+  # 点赞☆Star触发编译
+  watch:
+     types: [started]
+     
+# 环境变量	 
+env:
+  # 源码仓库地址
+  REPO_URL: "https://github.com/rustdesk/rustdesk"
+  # 源码分支
+  REPO_BRANCH: "master"
+  # Github 用户名
+  GITHUB_USER_NAME: "danxiaonuo"
+  # Github 邮箱
+  GITHUB_USER_EMAIL: "danxiaonuo@danxiaonuo.me"
+  # 仓库地址
+  GITHUB_RROJECT: "https://github.com/danxiaonuo/rustdesk"
+  # 分支
+  BRANCH: "main"
+  
+# 任务集
+jobs:
+        
+  rustdesk:
+    # 选择虚拟环境
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id || ! github.event.sender.id
+    
+    
+    # 运行步骤
+    steps:
+    
+    # 检出各个代码模块
+    - name: 检出各个代码模块
+      uses: actions/checkout@v4
+    
+      
+    # 初始化系统环境
+    - name: 初始化系统环境
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo -E apt-get -y install git git-core curl wget
+        sudo -E timedatectl set-timezone "Asia/Shanghai"
+
+    # 克隆源码
+    - name: 克隆源码
+      run: |
+        git clone --depth=1 -b $REPO_BRANCH $REPO_URL rustdesk
+        cd rustdesk
+        find ${GITHUB_WORKSPACE}/rustdesk/ \( -name .git -o -name .svn \) -type d | xargs -exec rm -rf
+             
+
+    # 上传源码
+    - name: 上传源码
+      env:
+          GITHUB_TOKEN: ${{ secrets.rustdesk_token }}
+      working-directory: ./rustdesk
+      run: |
+          git init
+          git config user.name $GITHUB_USER_NAME
+          git config user.email $GITHUB_USER_EMAIL
+          git add .
+          git commit -m "update rustdesk"
+          git push --force --quiet https://${{ env.GITHUB_TOKEN }}@$GITHUB_RROJECT HEAD:$BRANCH
+    
+    # 删除旧的GitHub-workflow    
+    - name: 删除旧的GitHub-workflow
+      uses: Mattraks/delete-workflow-runs@main
+      with:
+        retain_days: 1
+        keep_minimum_runs: 1    #保留多少个workflow不删除
