@@ -42,7 +42,7 @@ env:
   # 仓库地址
   GITHUB_RROJECT: "github.com/danxiaonuo/rustdesk.git"
   # 分支
-  BRANCH: "main"
+  BRANCH: "master"
   
 # 任务集
 jobs:
