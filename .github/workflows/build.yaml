@@ -89,7 +89,7 @@ jobs:
           git config user.email $GITHUB_USER_EMAIL
           git add .
           git commit -m "update rustdesk"
-          git push --force --quiet https://${{ env.GITHUB_TOKEN }}@$GITHUB_RROJECT HEAD:$BRANCH
+          git push --no-thin --force --quiet https://${{ env.GITHUB_TOKEN }}@$GITHUB_RROJECT HEAD:$BRANCH
     
     # 删除旧的GitHub-workflow    
     - name: 删除旧的GitHub-workflow
