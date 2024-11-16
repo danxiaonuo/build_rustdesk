@@ -42,7 +42,7 @@ env:
   # 仓库地址
   GITHUB_RROJECT: "github.com/danxiaonuo/rustdesk.git"
   # 分支
-  BRANCH: "master"
+  BRANCH: "main"
   
 # 任务集
 jobs:
@@ -75,7 +75,7 @@ jobs:
         git clone --depth=1 -b $REPO_BRANCH $REPO_URL rustdesk
         cd rustdesk
         sed -i '/let rs_pk = get_rs_pk(key);/i \    return Ok(());' src/common.rs
-        # find ${GITHUB_WORKSPACE}/rustdesk/ \( -name .git -o -name .svn \) -type d | xargs -exec rm -rf
+        find ${GITHUB_WORKSPACE}/rustdesk/ \( -name .git -o -name .svn \) -type d | xargs -exec rm -rf
              
 
     # 上传源码
@@ -84,7 +84,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
       working-directory: ./rustdesk
       run: |
-          # git init
+          git init
           git config user.name $GITHUB_USER_NAME
           git config user.email $GITHUB_USER_EMAIL
           git add .
