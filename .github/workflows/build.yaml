@@ -34,7 +34,7 @@ env:
   # 源码仓库地址
   REPO_URL: "https://github.com/rustdesk/rustdesk"
   # 源码分支
-  REPO_BRANCH: "master"
+  REPO_BRANCH: "1.3.2"
   # Github 用户名
   GITHUB_USER_NAME: "danxiaonuo"
   # Github 邮箱
@@ -42,7 +42,7 @@ env:
   # 仓库地址
   GITHUB_RROJECT: "github.com/danxiaonuo/rustdesk.git"
   # 分支
-  BRANCH: "master"
+  BRANCH: "main"
   
 # 任务集
 jobs:
