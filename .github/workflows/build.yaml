@@ -89,10 +89,7 @@ jobs:
         git rm --cached libs/hbb_common 2>/dev/null || true
         rm -rf libs/hbb_common/.git 2>/dev/null || true
         sed -i '/let rs_pk = get_rs_pk(key);/i \    return Ok(());' src/common.rs
-        sed -i '/ANDROID_SIGNING_KEY:/i\
-        \RS_PUB_KEY: "$\{{ secrets.RS_PUB_KEY }}"\
-        \RENDEZVOUS_SERVER: "$\{{ secrets.RENDEZVOUS_SERVER }}"\
-        \API_SERVER: "$\{{ secrets.API_SERVER }}"' .github/workflows/flutter-build.yml
+        sed -i '/ANDROID_SIGNING_KEY:/s/^\(\s*\).*/\1RS_PUB_KEY: "$\{{ secrets.RS_PUB_KEY }}"\n\1RENDEZVOUS_SERVER: "$\{{ secrets.RENDEZVOUS_SERVER }}"\n\1API_SERVER: "$\{{ secrets.API_SERVER }}"\n&/' .github/workflows/flutter-build.yml
         # find ${GITHUB_WORKSPACE}/rustdesk/ \( -name .git -o -name .svn \) -type d | xargs -exec rm -rf
              
 
