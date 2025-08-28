@@ -79,9 +79,9 @@ jobs:
         # git clone --depth=1 -b $REPO_BRANCH $REPO_URL rustdesk
         git clone --recurse-submodules -b $REPO_BRANCH $REPO_URL rustdesk
         cd rustdesk
-        # 1️⃣ 替换 RENDEZVOUS_SERVERS，只替换第一条匹配
+        # 1️⃣ 替换第一条 RENDEZVOUS_SERVERS
         sed -i '0,/^pub const RENDEZVOUS_SERVERS:/s#^pub const RENDEZVOUS_SERVERS:.*$#pub const RENDEZVOUS_SERVERS: &[&str] = &["desk.xiaonuo.live"];#' libs/hbb_common/src/config.rs
-        # 2️⃣ 替换 RS_PUB_KEY，只替换第一条匹配
+        # 2️⃣ 替换第一条 RS_PUB_KEY
         sed -i '0,/^pub const RS_PUB_KEY:/s#^pub const RS_PUB_KEY:.*$#pub const RS_PUB_KEY: &str = "yTf1GLw64sW67aUG0FETSImsLLIOjECGbsNcddv+KBQ=";#' libs/hbb_common/src/config.rs
         rm -f .gitmodules
         # 清理所有子模块配置（使用 git 命令自动清理）
