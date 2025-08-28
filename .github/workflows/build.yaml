@@ -73,8 +73,11 @@ jobs:
     - name: 克隆源码
       run: |
         # git clone --depth=1 -b $REPO_BRANCH $REPO_URL rustdesk
-        git clone -b $REPO_BRANCH $REPO_URL rustdesk
+        git clone --recurse-submodules -b $REPO_BRANCH $REPO_URL rustdesk
         cd rustdesk
+        rm -f .gitmodules
+        # 清理所有子模块配置（使用 git 命令自动清理）
+        git submodule deinit -f . 2>/dev/null || true
         sed -i '/let rs_pk = get_rs_pk(key);/i \    return Ok(());' src/common.rs
         # find ${GITHUB_WORKSPACE}/rustdesk/ \( -name .git -o -name .svn \) -type d | xargs -exec rm -rf
              
