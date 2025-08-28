@@ -79,15 +79,17 @@ jobs:
         # git clone --depth=1 -b $REPO_BRANCH $REPO_URL rustdesk
         git clone --recurse-submodules -b $REPO_BRANCH $REPO_URL rustdesk
         cd rustdesk
-        # 替换 RENDEZVOUS_SERVERS 这一行
-        sed -i 's#^pub const RENDEZVOUS_SERVERS:.*#pub const RENDEZVOUS_SERVERS: &[&str] = &["desk.xiaonuo.live"];#' libs/hbb_common/src/config.rs
-        # 替换 RS_PUB_KEY 这一行
-        sed -i 's#^pub const RS_PUB_KEY:.*#pub const RS_PUB_KEY: &str = "yTf1GLw64sW67aUG0FETSImsLLIOjECGbsNcddv+KBQ=";#' libs/hbb_common/src/config.rs
+        # 1️⃣ 替换 RENDEZVOUS_SERVERS，只替换第一条匹配
+        sed -i '0,/^pub const RENDEZVOUS_SERVERS:/s#^pub const RENDEZVOUS_SERVERS:.*$#pub const RENDEZVOUS_SERVERS: &[&str] = &["desk.xiaonuo.live"];#' libs/hbb_common/src/config.rs
+        # 2️⃣ 替换 RS_PUB_KEY，只替换第一条匹配
+        sed -i '0,/^pub const RS_PUB_KEY:/s#^pub const RS_PUB_KEY:.*$#pub const RS_PUB_KEY: &str = "yTf1GLw64sW67aUG0FETSImsLLIOjECGbsNcddv+KBQ=";#' libs/hbb_common/src/config.rs
         rm -f .gitmodules
         # 清理所有子模块配置（使用 git 命令自动清理）
         # git submodule deinit -f . 2>/dev/null || true
         git rm --cached libs/hbb_common 2>/dev/null || true
         rm -rf libs/hbb_common/.git 2>/dev/null || true
+        # 替换 src/common.rs 中的 admin.rustdesk.com 为 106.14.142.206:21114
+        sed -i 's#https://admin\.rustdesk\.com#http://106.14.142.206:21114#g' src/common.rs
         sed -i '/let rs_pk = get_rs_pk(key);/i \    return Ok(());' src/common.rs
         sed -i '/ANDROID_SIGNING_KEY:/s/^\(\s*\).*/\1RS_PUB_KEY: "$\{{ secrets.RS_PUB_KEY }}"\n\1RENDEZVOUS_SERVER: "$\{{ secrets.RENDEZVOUS_SERVER }}"\n\1API_SERVER: "$\{{ secrets.API_SERVER }}"\n&/' .github/workflows/flutter-build.yml
         # find ${GITHUB_WORKSPACE}/rustdesk/ \( -name .git -o -name .svn \) -type d | xargs -exec rm -rf
