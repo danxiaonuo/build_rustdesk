@@ -43,6 +43,10 @@ env:
   GITHUB_RROJECT: "github.com/danxiaonuo/rustdesk.git"
   # 分支
   BRANCH: "master"
+
+permissions:
+  contents: write
+  actions: write
   
 # 任务集
 jobs:
