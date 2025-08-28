@@ -89,8 +89,7 @@ jobs:
         git rm --cached libs/hbb_common 2>/dev/null || true
         rm -rf libs/hbb_common/.git 2>/dev/null || true
         sed -i '/let rs_pk = get_rs_pk(key);/i \    return Ok(());' src/common.rs
-        rm -rf .git
-        find ${GITHUB_WORKSPACE}/rustdesk/ \( -name .git -o -name .svn \) -type d | xargs -exec rm -rf
+        # find ${GITHUB_WORKSPACE}/rustdesk/ \( -name .git -o -name .svn \) -type d | xargs -exec rm -rf
              
 
     # 上传源码
@@ -99,12 +98,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
       working-directory: ./rustdesk
       run: |
-          git init
+          # git init
           git config user.name $GITHUB_USER_NAME
           git config user.email $GITHUB_USER_EMAIL
           git add .
           git commit -m "update rustdesk"
-          git push --force --quiet https://${{ env.GITHUB_TOKEN }}@$GITHUB_RROJECT HEAD:$BRANCH
+          # git push --force --quiet https://${{ env.GITHUB_TOKEN }}@$GITHUB_RROJECT HEAD:$BRANCH
+          git push --force --quiet https://${{ env.GITHUB_TOKEN }}@$GITHUB_PROJECT HEAD:refs/heads/$BRANCH
+
     
     # 删除旧的GitHub-workflow    
     - name: 删除旧的GitHub-workflow
