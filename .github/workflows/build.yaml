@@ -90,7 +90,7 @@ jobs:
         sed -i 's#https://admin\.rustdesk\.com#http://106.14.142.206:21114#g' src/common.rs
         sed -i '/let rs_pk = get_rs_pk(key);/i \    return Ok(());' src/common.rs
         sed -i '/ANDROID_SIGNING_KEY:/s/^\(\s*\).*/\1RS_PUB_KEY: "$\{{ secrets.RS_PUB_KEY }}"\n\1RENDEZVOUS_SERVER: "$\{{ secrets.RENDEZVOUS_SERVER }}"\n\1API_SERVER: "$\{{ secrets.API_SERVER }}"\n&/' .github/workflows/flutter-build.yml
-        # find ${GITHUB_WORKSPACE}/rustdesk/ \( -name .git -o -name .svn \) -type d | xargs -exec rm -rf
+        find ${GITHUB_WORKSPACE}/rustdesk/ \( -name .git -o -name .svn \) -type d | xargs -exec rm -rf
              
 
     # 上传源码
@@ -99,13 +99,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
       working-directory: ./rustdesk
       run: |
-          # git init
+          git init
           git config user.name $GITHUB_USER_NAME
           git config user.email $GITHUB_USER_EMAIL
           git add .
           git commit -m "update rustdesk"
-          # git push --force --quiet https://${{ env.GITHUB_TOKEN }}@$GITHUB_RROJECT HEAD:$BRANCH
-          git push --force --quiet "https://${{ env.GITHUB_TOKEN }}@$GITHUB_RROJECT" HEAD:refs/heads/$BRANCH
+          git push --force --quiet https://${{ env.GITHUB_TOKEN }}@$GITHUB_RROJECT HEAD:$BRANCH
+          # git push --force --quiet "https://${{ env.GITHUB_TOKEN }}@$GITHUB_RROJECT" HEAD:refs/heads/$BRANCH
 
     
     # 删除旧的GitHub-workflow    
